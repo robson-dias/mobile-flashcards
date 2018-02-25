@@ -2,34 +2,70 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
 
+const baralhos = [
+    {
+        titulo: 'Baralho 1',
+        flashcards: 1
+    },
+    {
+        titulo: 'Baralho 2',
+        flashcards: 2
+    },
+    {
+        titulo: 'Baralho 3',
+        flashcards: 3
+    },
+    {
+        titulo: 'Baralho 1',
+        flashcards: 1
+    },
+    {
+        titulo: 'Baralho 2',
+        flashcards: 2
+    },
+    {
+        titulo: 'Baralho 3',
+        flashcards: 3
+    },
+    {
+        titulo: 'Baralho 1',
+        flashcards: 1
+    },
+    {
+        titulo: 'Baralho 2',
+        flashcards: 2
+    },
+    {
+        titulo: 'Baralho 3',
+        flashcards: 3
+    }
+]
+
 export default class BaralhoLista extends React.Component {
+    state = {
+        baralhos: baralhos
+    }
+    
   render() {
+
+    const { baralhos } = this.state
+
     return (
       <View style={styles.container}>
-        <View style={styles.baralho}>
-            <Text style={styles.baralhoTitulo}>
-                <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{' '}Baralho 12
-            </Text>
-            <Text style={styles.baralhoFlashcards}>3 flashcards</Text>
-        </View>
-        <View style={styles.baralho}>
-            <Text style={styles.baralhoTitulo}>
-                <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{' '}Baralho 12
-            </Text>
-            <Text style={styles.baralhoFlashcards}>3 flashcards</Text>
-        </View>
-        <View style={styles.baralho}>
-            <Text style={styles.baralhoTitulo}>
-                <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{' '}Baralho 12
-            </Text>
-            <Text style={styles.baralhoFlashcards}>3 flashcards</Text>
-        </View>
+        
+        {baralhos.map((baralho, key) => 
+            <View key={key} style={styles.baralho}>
+                <Text style={styles.baralhoTitulo}>
+                        <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralho.titulo}`}
+                </Text>
+                <Text style={styles.baralhoFlashcards}>{baralho.flashcards} flashcards</Text>
+            </View>
+        )}
+        
       </View>
     );
   }
 }
-
-
 
 const styles = StyleSheet.create({
     container: {
