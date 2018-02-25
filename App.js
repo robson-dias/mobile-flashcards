@@ -26,15 +26,14 @@ const Drawer = DrawerNavigator({
         ),
         headerStyle: { paddingRight: 10, paddingLeft: 10 }
     })
-  },
+  }
 })
-
 
 const MainNavigator = StackNavigator({
   Home: {
     screen: Drawer,
   },
-  Flascards: {
+  Flashcards: {
     screen: Flashcards
   }
 })

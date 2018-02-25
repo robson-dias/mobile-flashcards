@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { NavigationActions } from 'react-navigation'
 
 const baralhos = [
     {
@@ -46,25 +47,29 @@ export default class BaralhoLista extends React.Component {
         baralhos: baralhos
     }
     
-  render() {
+    toFlashcards = () => {
+        this.props.navigation.dispatch(NavigationActions.navigate({routeName : 'Flashcards'}))
+    }
 
-    const { baralhos } = this.state
+    render() {
 
-    return (
-      <View style={styles.container}>
-        
-        {baralhos.map((baralho, key) => 
-            <View key={key} style={styles.baralho}>
-                <Text style={styles.baralhoTitulo}>
+        const { baralhos } = this.state
+
+        return (
+        <View style={styles.container}>
+            
+            {baralhos.map((baralho, key) => 
+                <TouchableOpacity key={key} style={styles.baralho} onPress={this.toFlashcards}>
+                    <Text style={styles.baralhoTitulo}>
                         <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralho.titulo}`}
-                </Text>
-                <Text style={styles.baralhoFlashcards}>{baralho.flashcards} flashcards</Text>
-            </View>
-        )}
-        
-      </View>
-    );
-  }
+                    </Text>
+                    <Text style={styles.baralhoFlashcards}>{baralho.flashcards} flashcards</Text>
+                </TouchableOpacity>
+            )}
+            
+        </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
