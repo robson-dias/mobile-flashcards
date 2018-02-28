@@ -1,18 +1,10 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Easing, Animated } from 'react-native';
 import { DrawerNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
 import { Ionicons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
 import Flashcards from './components/Flashcards'
-
-function AppStatusBar ({backgroundColor, ...props}) {
-  return (
-    <View style={{ backgroundColor, height: Constants.statusBarHeight }}>
-      <StatusBar translucent backgroundColor={backgroundColor} {...props} />
-    </View>
-  )
-}
 
 const Drawer = DrawerNavigator({
   BaralhoLista: {
@@ -34,15 +26,40 @@ const MainNavigator = StackNavigator({
     screen: Drawer,
   },
   Flashcards: {
-    screen: Flashcards
+    screen: Flashcards,
   }
+},
+{
+  transitionConfig: () => ({
+    transitionSpec: {
+      duration: 400,
+      easing: Easing.out(Easing.poly(4)),
+      timing: Animated.timing,
+    },
+    screenInterpolator: sceneProps => {
+      const { layout, position, scene } = sceneProps;
+      const { index } = scene;
+
+      const height = layout.initHeight;
+      const translateX = position.interpolate({
+        inputRange: [index - 1, index, index + 1],
+        outputRange: [height, 0, 0],
+      });
+
+      const opacity = position.interpolate({
+        inputRange: [index - 1, index - 0.99, index],
+        outputRange: [0, 1, 1],
+      });
+
+      return { opacity, transform: [{ translateX }] };
+    },
+  }),
 })
 
 export default class App extends React.Component {
   render() {
     return (
       <View style={{flex: 1}}>
-        <AppStatusBar backgroundColor='#363636' barStyle="light-content" />
         <MainNavigator />
       </View>
     );
