@@ -21,47 +21,46 @@ export default class Flashcards extends React.Component {
 
         return (
             <View style={styles.container}>
-                <FlipCard style={styles.flipCard}
-                    friction={6}
-                    perspective={1000}
-                    flipHorizontal={true}
-                    flipVertical={false}
-                    flip={this.state.flip}
-                    clickable={false}
-                >
-                    
-                    <View style={styles.baralho}>
-                        <Text>Flashcards F</Text>
-                        <View style={styles.rotateContainerButton}>
-                            <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                                <FontAwesome name='rotate-right' size={30} color={'#3b3b3b'} />
-                            </TouchableOpacity>    
-                        </View> 
-                    </View>
-                    <View style={styles.baralho}>
-                        <Text>Flashcards B</Text>
-                        <View style={styles.rotateContainerButton}>
-                            <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                                <FontAwesome name='rotate-left' size={30} color={'#3b3b3b'} />
-                            </TouchableOpacity>   
-                        </View> 
-                    </View>
+                <View style={styles.containerFlip}>
+                    <FlipCard style={styles.flipCard}
+                        friction={6}
+                        perspective={1000}
+                        flipHorizontal={true}
+                        flipVertical={false}
+                        flip={this.state.flip}
+                        clickable={false}
+                    >
+                        
+                        <View style={styles.baralho}>
+                            <Text>Flashcards F</Text>
+                            <View style={styles.rotateContainerButton}>
+                                <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                                    <FontAwesome name='rotate-right' size={30} color={'#3b3b3b'} />
+                                </TouchableOpacity>    
+                            </View> 
+                        </View>
+                        <View style={styles.baralho}>
+                            <Text>Flashcards B</Text>
+                            <View style={styles.rotateContainerButton}>
+                                <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                                    <FontAwesome name='rotate-left' size={30} color={'#3b3b3b'} />
+                                </TouchableOpacity>   
+                            </View> 
+                        </View>
 
-                </FlipCard>
+                    </FlipCard>
+                </View>
+
                 <View style={styles.footer}>
-                    <Text>1/8 Cartas</Text>
-                   
-                    <TouchableOpacity style={styles.botaoAdd} onPress={this.toFlashcards}>
-                        <Text>
-                            <FontAwesome name='plus' size={15} color='#fff' />
-                        </Text>
-                    </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.botaoAdd} onPress={this.toFlashcards}>
-                        <Text>
-                            <FontAwesome name='plus' size={15} color='#fff' />
-                        </Text>
-                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                        <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />
+                    </TouchableOpacity>   
+
+                    <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                        <FontAwesome name='plus-circle' size={60} style={styles.footerButtom} />
+                    </TouchableOpacity>   
+
                 </View>
             </View>
         );
@@ -72,6 +71,10 @@ export default class Flashcards extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: '#fff',
+    },
+    containerFlip: {
+        flex: 6,
         backgroundColor: '#fff',
         alignItems: 'center',
     },
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         borderRadius: 7,
         padding: 10,
         margin: 60,
-        marginBottom: 160,
+        marginBottom: 30,
         elevation: 2
     },
     rotateContainerButton: {
@@ -94,22 +97,18 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
     },
     rotateButton: {
-        width: 30,
-        height: 30
+        width: 60,
+        height: 60
     },
     footer: {
-        height: 100,
-        position: 'absolute',
-        bottom: 0,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        height: 50,
     },
-    botaoAdd: {
-        backgroundColor: '#ef0404',
-        borderRadius: 30,
-        paddingTop: 23,
-        paddingBottom: 23,
-        paddingRight: 25,
-        paddingLeft: 25,
-        elevation: 2
+    footerButtom: {
+        color: '#ef0404',
+        elevation: 2,
     }
 })
 
