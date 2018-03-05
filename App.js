@@ -27,6 +27,9 @@ const MainNavigator = StackNavigator({
   },
   Flashcards: {
     screen: Flashcards,
+    navigationOptions: ({ navigation }) => ({
+      title: "Flashcards"
+    })
   }
 },
 {
