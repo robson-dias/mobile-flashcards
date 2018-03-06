@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Easing, Animated } from 'react-native';
+import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Easing, Animated, TextInput } from 'react-native';
 import { DrawerNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
 import { Ionicons } from '@expo/vector-icons'
@@ -28,7 +28,7 @@ const MainNavigator = StackNavigator({
   Flashcards: {
     screen: Flashcards,
     navigationOptions: ({ navigation }) => ({
-      title: "Flashcards"
+      headerTitle: <TextInput style={{ width: 250, padding: 10, fontSize: 16, }} />
     })
   }
 },
