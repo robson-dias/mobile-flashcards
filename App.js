@@ -2,28 +2,19 @@ import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Easing, Animated, TextInput } from 'react-native';
 import { DrawerNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
-import { Ionicons } from '@expo/vector-icons'
+import { MaterialCommunityIcons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
 import Flashcards from './components/Flashcards'
 
-const Drawer = DrawerNavigator({
-  BaralhoLista: {
-    screen: BaralhoLista,
-    navigationOptions:({navigation}) => ({
-        title: "Lista de Baralhos",
-        headerLeft:(
-          <TouchableOpacity onPress={() => navigation.navigate("DrawerOpen")}>
-            <Ionicons name='md-menu' size={30} />
-          </TouchableOpacity>
-        ),
-        headerStyle: { paddingRight: 10, paddingLeft: 10 }
-    })
-  }
-})
 
 const MainNavigator = StackNavigator({
   Home: {
-    screen: Drawer,
+    screen: BaralhoLista,
+    navigationOptions: ({ navigation }) => ({
+      title: "Lista de Baralhos",
+      headerLeft: (<MaterialCommunityIcons name='cards' size={30} />),
+      headerStyle: { paddingRight: 15, paddingLeft: 15 }
+    })
   },
   Flashcards: {
     screen: Flashcards,

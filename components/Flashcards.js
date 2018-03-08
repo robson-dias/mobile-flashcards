@@ -21,6 +21,9 @@ export default class Flashcards extends React.Component {
         }]
     }
 
+    setTitle = (title) => {
+        this.setState({ title })
+    }
 
     setPergunta = (props) => {
         const { indice, pergunta } = props
@@ -73,6 +76,7 @@ export default class Flashcards extends React.Component {
                             <Baralho
                                 key={indice}
                                 indice={indice}
+                                setTitle={this.setTitle}
                                 pergunta={card.pergunta}
                                 setPergunta={this.setPergunta}
                                 resposta={card.resposta}
