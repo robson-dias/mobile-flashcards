@@ -42,7 +42,8 @@ export default class Baralho extends React.Component {
 
     render() {
 
-        const { pergunta, setPergunta, resposta, setResposta } = this.props
+        const { indice, pergunta, resposta, removeCard, setResposta, setPergunta } = this.props
+        const numberCard = indice + 1
 
         return (
             <FlipCard style={styles.flipCard}
@@ -56,14 +57,16 @@ export default class Baralho extends React.Component {
 
                 <View style={styles.baralho}>
                     <View style={styles.editContainerButton}>
-                        <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <FontAwesome name='remove' size={30} color={'#3b3b3b'} />
+                        <TouchableOpacity onPress={() => removeCard(indice)} style={styles.editButton}>
+                            <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
                         </TouchableOpacity>
 
-                        <Text style={styles.titleBaralho}>Front</Text>
+                        <Text style={styles.titleBaralho}>Front {numberCard}</Text>
 
                         <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <FontAwesome name='edit' size={30} color={'#3b3b3b'} />
+                            <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
+                                <FontAwesome name={this.state.edit === true ? 'check' : 'edit'} size={30} color={'#3b3b3b'} />
+                            </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
 
@@ -75,7 +78,7 @@ export default class Baralho extends React.Component {
                     {this.state.edit === true &&
                         <TextInput
                             style={styles.textInput}
-                            onChangeText={this.setPergunta}
+                            onChangeText={(pergunta) => setPergunta({indice, pergunta})}
                             value={pergunta}
                         />
                     }
@@ -88,14 +91,16 @@ export default class Baralho extends React.Component {
                 </View>
                 <View style={styles.baralho}>
                     <View style={styles.editContainerButton}>
-                        <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <FontAwesome name='remove' size={30} color={'#3b3b3b'} />
+                        <TouchableOpacity onPress={() => removeCard(indice)} style={styles.editButton}>
+                            <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
                         </TouchableOpacity>
 
-                        <Text style={styles.titleBaralho}>Back</Text>
+                        <Text style={styles.titleBaralho}>Back {numberCard}</Text>
 
                         <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <FontAwesome name='edit' size={30} color={'#3b3b3b'} />
+                            <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
+                                <FontAwesome name={this.state.edit === true ? 'check' : 'edit'} size={30} color={'#3b3b3b'} />
+                            </TouchableOpacity>
                         </TouchableOpacity>
                     </View>
 
@@ -107,7 +112,7 @@ export default class Baralho extends React.Component {
                     {this.state.edit === true &&
                         <TextInput
                             style={styles.textInput}
-                            onChangeText={setResposta}
+                            onChangeText={(resposta) => setResposta({indice, resposta})}
                             value={resposta}
                         />
                     }

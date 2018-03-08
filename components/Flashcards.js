@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
 import Baralho from './Baralho'
 
@@ -7,40 +7,80 @@ export default class Flashcards extends React.Component {
 
     state = {
         title: 'Titulo FlashCards',
-        pergunta: 'Sera? ',
-        resposta: 'Sim!',
+        cards : [{
+            pergunta: 'Pergunta 1',
+            resposta: 'Resposta 1' 
+        },
+        {
+            pergunta: 'Pergunta 2',
+            resposta: 'Resposta 2'
+        },
+        {
+            pergunta: 'Pergunta 3',
+            resposta: 'Resposta 3'
+        }]
     }
 
-    setPergunta = (pergunta) => this.setState({ pergunta })
-    setResposta = (resposta) => this.setState({ resposta })
+
+    setPergunta = (props) => {
+        const { indice, pergunta } = props
+
+        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, pergunta: pergunta } : card)
+
+        this.setState({ cards })
+    }
+
+    setResposta = (props) => {
+        const { indice, resposta } = props
+
+        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, resposta: resposta } : card)
+
+        this.setState({ cards })
+    }
+
+    removeCard = (indice) => {
+        const { cards } = this.state
+
+        Alert.alert(
+            'Atenção!',
+            'Deseja remover esse cartão?',
+            [
+                { text: 'Não' },
+                { text: 'Sim', onPress: () => {
+                    const newCards = cards.filter((card, indiceCard) => indiceCard !== indice)
+
+                    this.setState({ cards: newCards })
+                } },
+            ],
+            { cancelable: false }
+        )
+
+    }
 
     render() {
+
+        const { cards } = this.state
 
         return (
             <View style={styles.container}>
                 
                 <View style={styles.containerFlip} >
                     <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false}>
-                            <Baralho 
-                                pergunta={this.state.pergunta} 
-                                setPergunta={this.setPergunta} 
-                                resposta={this.state.resposta}
-                                setResposta={this.setResposta} 
-                                />
+                        
+                        {cards.length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
 
-                                <Baralho 
-                                pergunta={this.state.pergunta} 
-                                setPergunta={this.setPergunta} 
-                                resposta={this.state.resposta}
-                                setResposta={this.setResposta} 
-                                />
-
-                                <Baralho 
-                                pergunta={this.state.pergunta} 
-                                setPergunta={this.setPergunta} 
-                                resposta={this.state.resposta}
-                                setResposta={this.setResposta} 
-                                />
+                        {cards.length > 0 && cards.map((card, indice) => 
+                            <Baralho
+                                key={indice}
+                                indice={indice}
+                                pergunta={card.pergunta}
+                                setPergunta={this.setPergunta}
+                                resposta={card.resposta}
+                                setResposta={this.setResposta}
+                                removeCard={this.removeCard}
+                            />  
+                        )}
+                            
 
                     </ScrollView>
                 </View>
