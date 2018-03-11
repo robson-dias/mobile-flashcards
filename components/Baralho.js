@@ -1,164 +1,143 @@
 import React from 'react';
-import { StyleSheet, Text, View, Animated, TouchableOpacity, TextInput, Keyboard, Dimensions } from 'react-native';
-import FlipCard from 'react-native-flip-card'
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import { FontAwesome } from '@expo/vector-icons'
-
-const {height, width} = Dimensions.get('window')
+import Cards from './Cards'
 
 export default class Baralho extends React.Component {
 
     state = {
-        flip: false,
-        edit: false
+        title: 'Titulo FlashCards',
+        cards : [{
+            pergunta: 'Pergunta 1',
+            resposta: 'Resposta 1' 
+        },
+        {
+            pergunta: 'Pergunta 2',
+            resposta: 'Resposta 2'
+        },
+        {
+            pergunta: 'Pergunta 3',
+            resposta: 'Resposta 3'
+        }]
     }
 
-    componentWillMount() {
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+    setTitle = (title) => {
+        this.setState({ title })
     }
 
-    componentWillUnmount() {
-        this.keyboardDidHideListener.remove();
+    setPergunta = (props) => {
+        const { indice, pergunta } = props
+
+        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, pergunta: pergunta } : card)
+
+        this.setState({ cards })
     }
 
-    _keyboardDidHide = () => {
-        this.setState({ edit: false })
+    setResposta = (props) => {
+        const { indice, resposta } = props
+
+        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, resposta: resposta } : card)
+
+        this.setState({ cards })
     }
 
-    onFlip = () => {
-        this.setState(function (state, props) {
-            return {
-                flip: state.flip === true ? false : true
-            }
-        });
-    }
+    removeCard = (indice) => {
+        const { cards } = this.state
 
-    onEdit = () => {
-        this.setState(function (state, props) {
-            return {
-                edit: state.edit === true ? false : true
-            }
-        });
+        Alert.alert(
+            'Atenção!',
+            'Deseja remover esse cartão?',
+            [
+                { text: 'Não' },
+                { text: 'Sim', onPress: () => {
+                    const newCards = cards.filter((card, indiceCard) => indiceCard !== indice)
+
+                    this.setState({ cards: newCards })
+                } },
+            ],
+            { cancelable: false }
+        )
+
     }
 
     render() {
 
-        const { indice, pergunta, resposta, removeCard, setResposta, setPergunta } = this.props
-        const numberCard = indice + 1
+        const { cards } = this.state
 
         return (
-            <FlipCard style={styles.flipCard}
-                friction={6}
-                perspective={1000}
-                flipHorizontal={true}
-                flipVertical={false}
-                flip={this.state.flip}
-                clickable={false}
-            >
+            <View style={styles.container}>
+                
+                <View style={styles.containerFlip} >
+                    <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false}>
+                        
+                        {cards.length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
 
-                <View style={styles.baralho}>
-                    <View style={styles.editContainerButton}>
-                        <TouchableOpacity onPress={() => removeCard(indice)} style={styles.editButton}>
-                            <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
+                        {cards.length > 0 && cards.map((card, indice) => 
+                            <Cards
+                                key={indice}
+                                indice={indice}
+                                setTitle={this.setTitle}
+                                pergunta={card.pergunta}
+                                setPergunta={this.setPergunta}
+                                resposta={card.resposta}
+                                setResposta={this.setResposta}
+                                removeCard={this.removeCard}
+                            />  
+                        )}
+                            
 
-                        <Text style={styles.titleBaralho}>Front {numberCard}</Text>
-
-                        <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                                <FontAwesome name={this.state.edit === true ? 'check' : 'edit'} size={30} color={'#3b3b3b'} />
-                            </TouchableOpacity>
-                        </TouchableOpacity>
-                    </View>
-
-                    {this.state.edit === false &&
-                        <Text style={styles.text} onPress={this.onEdit}>
-                        {pergunta}
-                        </Text>
-                    }
-                    {this.state.edit === true &&
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={(pergunta) => setPergunta({indice, pergunta})}
-                            value={pergunta}
-                        />
-                    }
-
-                    <View style={styles.rotateContainerButton}>
-                        <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                            <FontAwesome name='rotate-right' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={styles.baralho}>
-                    <View style={styles.editContainerButton}>
-                        <TouchableOpacity onPress={() => removeCard(indice)} style={styles.editButton}>
-                            <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
-
-                        <Text style={styles.titleBaralho}>Back {numberCard}</Text>
-
-                        <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                            <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
-                                <FontAwesome name={this.state.edit === true ? 'check' : 'edit'} size={30} color={'#3b3b3b'} />
-                            </TouchableOpacity>
-                        </TouchableOpacity>
-                    </View>
-
-                    {this.state.edit === false &&
-                        <Text style={styles.text} onPress={this.onEdit}>
-                        {resposta}
-                        </Text>
-                    }
-                    {this.state.edit === true &&
-                        <TextInput
-                            style={styles.textInput}
-                            onChangeText={(resposta) => setResposta({indice, resposta})}
-                            value={resposta}
-                        />
-                    }
-
-                    <View style={styles.rotateContainerButton}>
-                        <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                            <FontAwesome name='rotate-left' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
-                    </View>
+                    </ScrollView>
                 </View>
 
-            </FlipCard>
-        )
+                <View style={styles.footer}>
+
+                    <TouchableOpacity>
+                        <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />
+                    </TouchableOpacity>   
+
+                    <Text style={styles.numeroCartas}>
+                        <Text>
+                            1/6{"\n"}
+                            Flashcards
+                        </Text>
+                    </Text>
+
+                    <TouchableOpacity>
+                        <FontAwesome name='plus-circle' size={60} style={styles.footerButtom} />
+                    </TouchableOpacity>   
+
+                </View>
+            </View>
+        );
     }
+
 }
 
 const styles = StyleSheet.create({
-    flipCard: {
-        borderColor: '#fff',
-        width: width,
-    },
-    baralho: {
+    container: {
         flex: 1,
-        backgroundColor: '#fff37a',
-        borderRadius: 7,
-        padding: 10,
-        margin: 60,
-        marginBottom: 30,
-        elevation: 2
+        backgroundColor: '#fff',
     },
-    rotateContainerButton: {
+    containerFlip: {
+        flex: 5,
+        backgroundColor: '#fff',
+    },
+    footer: {
         flex: 1,
-        flexDirection: 'column-reverse',
-        alignItems: 'flex-end',
-    },
-    rotateButton: {
-        width: 30,
-        height: 30
-    },
-    editContainerButton: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'space-around',
+        height: 50,
     },
-    editButton: {
-        width: 30,
-        height: 30
+    footerButtom: {
+        color: '#ef0404',
+        elevation: 2,
+    },
+    numeroCartas: {
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontWeight: 'bold',
+        fontSize: 12,
+        color: '#3b3b3b',
     },
     textInput: {
         fontWeight: 'bold',
@@ -175,9 +154,10 @@ const styles = StyleSheet.create({
         color: '#3b3b3b',
         padding: 10,
     },
-    titleBaralho: {
+    titleBaralho: { 
         padding: 10,
         color: '#878787',
         fontWeight: 'bold',
     }
 })
+

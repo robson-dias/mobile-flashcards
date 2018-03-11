@@ -1,10 +1,13 @@
 import React from 'react';
 import { StyleSheet, Text, View, StatusBar, TouchableOpacity, Easing, Animated, TextInput } from 'react-native';
+import { createStore } from 'redux'
+import { Provider } from 'react-redux'
+import reducer from './reducers'
 import { DrawerNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
-import Flashcards from './components/Flashcards'
+import Baralho from './components/Baralho'
 
 
 const MainNavigator = StackNavigator({
@@ -16,10 +19,13 @@ const MainNavigator = StackNavigator({
       headerStyle: { paddingRight: 15, paddingLeft: 15 }
     })
   },
-  Flashcards: {
-    screen: Flashcards,
+  Baralho: {
+    screen: Baralho,
     navigationOptions: ({ navigation }) => ({
-      headerTitle: <TextInput style={{ width: 250, padding: 10, fontSize: 16, }} />
+        headerTitle: <TextInput 
+              value={navigation.state.params.title} 
+              style={{ width: 250, padding: 10, fontSize: 16 }} 
+            />
     })
   }
 },
@@ -53,9 +59,11 @@ const MainNavigator = StackNavigator({
 export default class App extends React.Component {
   render() {
     return (
-      <View style={{flex: 1}}>
-        <MainNavigator />
-      </View>
+      <Provider store={createStore(reducer)}>
+        <View style={{flex: 1}}>
+          <MainNavigator />
+        </View>
+      </Provider>
     );
   }
 }

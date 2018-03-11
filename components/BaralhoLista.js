@@ -1,78 +1,81 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
-import { FontAwesome, Ionicons } from '@expo/vector-icons'
+import { connect } from 'react-redux'
+import { receiveBaralhos } from '../actions'
+import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
 
-const baralhos = [
+const baralhosData = [
     {
-        titulo: 'Baralho 1',
-        flashcards: 1
+        title: 'Titulo FlashCards',
+        cards: [{
+            pergunta: 'Pergunta 1',
+            resposta: 'Resposta 1'
+        },
+        {
+            pergunta: 'Pergunta 2',
+            resposta: 'Resposta 2'
+        },
+        {
+            pergunta: 'Pergunta 3',
+            resposta: 'Resposta 3'
+        }]
     },
     {
-        titulo: 'Baralho 2',
-        flashcards: 2
-    },
-    {
-        titulo: 'Baralho 3',
-        flashcards: 3
-    },
-    {
-        titulo: 'Baralho 4',
-        flashcards: 4
-    },
-    {
-        titulo: 'Baralho 5',
-        flashcards: 5
-    },
-    {
-        titulo: 'Baralho 6',
-        flashcards: 6
-    },
-    {
-        titulo: 'Baralho 7',
-        flashcards: 7
-    },
-    {
-        titulo: 'Baralho 8',
-        flashcards: 8
-    },
-    {
-        titulo: 'Baralho 9',
-        flashcards: 9
-    },
-    {
-        titulo: 'Baralho 10',
-        flashcards: 10
+        title: 'Titulo FlashCards 2',
+        cards: [{
+            pergunta: 'Pergunta 1',
+            resposta: 'Resposta 1'
+        },
+        {
+            pergunta: 'Pergunta 2',
+            resposta: 'Resposta 2'
+        },
+        {
+            pergunta: 'Pergunta 3',
+            resposta: 'Resposta 3'
+        }]
     }
 ]
 
 
-export default class BaralhoLista extends React.Component {
-    state = {
-        baralhos: baralhos
-    }
+class BaralhoLista extends React.Component {
     
-    toFlashcards = () => {
-        this.props.navigation.dispatch(NavigationActions.navigate({routeName : 'Flashcards'}))
+    componentDidMount() {
+        const { dispatch } = this.props
+
+        dispatch(receiveBaralhos(baralhosData))
+    }
+
+    toFlashcards = (baralho) => {
+        
+        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: baralho.title }}))
     }
 
     render() {
 
-        const { baralhos } = this.state
+        const { baralhos } = this.props
+
 
         return (
             <View style={styles.container} >
-                <ScrollView style={{ flex: 1}}>
-                    {baralhos.map((baralho, key) =>
-                        <TouchableOpacity key={key} style={styles.baralho} onPress={this.toFlashcards}>
-                            <Text style={styles.baralhoTitulo}>
-                                <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralho.titulo}`}
-                            </Text>
-                            <Text style={styles.baralhoFlashcards}>{baralho.flashcards} flashcards</Text>
-                        </TouchableOpacity>
-                    )}
-                    <View style={{ height: 30 }}></View>
-                </ScrollView>
+                {baralhos.length > 0 ? 
+                    <ScrollView style={{ flex: 1}}>
+                        {baralhos.map((baralho, key) =>
+                            <TouchableOpacity key={key} style={styles.baralho} onPress={() => this.toFlashcards(baralho)}>
+                                <Text style={styles.baralhoTitulo}>
+                                    <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralho.title}`}
+                                </Text>
+                                <Text style={styles.baralhoFlashcards}>{baralho.cards.length} flashcards</Text>
+                            </TouchableOpacity>
+                        )}
+                        <View style={{ height: 30 }}></View>
+                    </ScrollView>
+                : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                        <MaterialCommunityIcons name='cards' size={200} color={'#CCC'} />
+                        <Text style={{ color: '#CCC' }}>Nenhum baralho Cadastrado.</Text>
+                    </View>
+                }
 
                 <TouchableOpacity style={styles.botaoAdd} onPress={this.toFlashcards}>
                     <Text>
@@ -123,3 +126,12 @@ const styles = StyleSheet.create({
     }
 });
 
+function mapStateToProps(baralhos) {
+    return {
+        baralhos
+    }
+}
+
+export default connect(
+    mapStateToProps,
+)(BaralhoLista)

@@ -24,6 +24,8 @@
     "react-native": "0.52.0",
     "react-native-flip-card": "^3.5.2",
     "react-native-flip-view": "^1.0.5",
-    "react-navigation": "^1.1.2"
+    "react-navigation": "^1.1.2",
+    "react-redux": "^5.0.7",
+    "redux": "^3.7.2"
   }
 }
