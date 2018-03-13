@@ -161,8 +161,11 @@ function mapDispatchToProps(dispatch) {
         add: (baralhos, indice, navigation) => submitBaralho(baralhos).then(() => {
           
             const { title } = baralhos[indice]
+            navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key: indice } }))
 
-            navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key : indice } }))
+            fetchBaralhos()
+                .then((baralhos) => dispatch(receiveBaralhos(baralhos)))
+            
             
         }),
         remove: (key) => removeBaralho(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(deleteBaralho(baralhos)))),

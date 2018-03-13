@@ -42,6 +42,7 @@ export function updateBaralho(key, dados) {
 }
 
 export function addCard(key) {
+    
     return AsyncStorage.getItem(FLASHMOBILE_STORAGE_KEY)
         .then((results) => {
             const data = JSON.parse(results)
