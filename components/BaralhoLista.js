@@ -6,33 +6,6 @@ import { submitBaralho, fetchBaralhos } from '../utils/api'
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
 
-const baralhosData1 = [
-    {
-        title: 'A1',
-        cards: [{
-            pergunta: 'PA',
-            resposta: 'RA'
-        }]
-    },
-    {
-        title: 'A1',
-        cards: [{
-            pergunta: 'PA',
-            resposta: 'RA'
-        }]
-    }
-]
-
-const baralhoData = 
-    {
-        title: 'A2',
-        cards: [{
-            pergunta: 'PA',
-            resposta: 'RA'
-        }]
-    };
-
-
 
 class BaralhoLista extends React.Component {
     
@@ -54,7 +27,7 @@ class BaralhoLista extends React.Component {
         const indice = Object.keys(this.props.baralhos).length
 
         const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
-            title: `Baralho ${indice}`,
+            title: ``,
             cards: [{
                 pergunta: '',
                 resposta: ''

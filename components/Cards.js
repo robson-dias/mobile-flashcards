@@ -9,7 +9,7 @@ export default class Cards extends React.Component {
 
     state = {
         flip: false,
-        edit: false
+        edit: true
     }
 
     componentWillMount() {
@@ -80,6 +80,7 @@ export default class Cards extends React.Component {
                             style={styles.textInput}
                             onChangeText={(pergunta) => setPergunta({indice, pergunta})}
                             value={pergunta}
+                            placeholder={'Insira uma Pergunta'}
                         />
                     }
 
@@ -114,6 +115,7 @@ export default class Cards extends React.Component {
                             style={styles.textInput}
                             onChangeText={(resposta) => setResposta({indice, resposta})}
                             value={resposta}
+                            placeholder={'Insira uma Resposta'}
                         />
                     }
 

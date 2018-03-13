@@ -25,6 +25,7 @@ const MainNavigator = StackNavigator({
         headerTitle: <TextInput 
               value={navigation.state.params.title} 
               style={{ width: 250, padding: 10, fontSize: 16 }} 
+              placeholder={'Insira um Título'}
             />
     })
   }
