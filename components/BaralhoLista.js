@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { connect } from 'react-redux'
-import { addBaralho, addBaralhos, receiveBaralhos } from '../actions'
-import { submitBaralho, fetchBaralhos } from '../utils/api'
+import { addBaralho, receiveBaralhos } from '../actions'
+import { submitBaralho, fetchBaralhos, removeBaralho } from '../utils/api'
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
 
@@ -27,7 +27,7 @@ class BaralhoLista extends React.Component {
         const indice = Object.keys(this.props.baralhos).length
 
         const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
-            title: ``,
+            title: 'ROBSON TESTANDO A PARADA TODA',
             cards: [{
                 pergunta: '',
                 resposta: ''
@@ -35,6 +35,24 @@ class BaralhoLista extends React.Component {
         }})
 
         this.props.add(newBaralhos, indice, this.props.navigation)
+
+    }
+
+    toRemove = (key) => {
+
+        Alert.alert(
+            'Atenção!',
+            `Deseja remover esse baralho? ${key}`,
+            [
+                { text: 'Não' },
+                {
+                    text: 'Sim', onPress: () => {
+                        this.props.remove(key)
+                    }
+                },
+            ],
+            { cancelable: false }
+        )
 
     }
 
@@ -48,6 +66,11 @@ class BaralhoLista extends React.Component {
                     <ScrollView style={{ flex: 1}}>
                         {Object.keys(baralhos).map((key) =>
                             <TouchableOpacity key={key} style={styles.baralho} onPress={() => this.toFlashcards(key)}>
+                                
+                                <TouchableOpacity onPress={() => this.toRemove(key)} style={styles.remove}>
+                                    <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
+                                </TouchableOpacity>
+
                                 <Text style={styles.baralhoTitulo}>
                                     <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralhos[key].title}`}
                                 </Text>
@@ -108,6 +131,17 @@ const styles = StyleSheet.create({
         bottom : 20,
         right: 25,
         elevation: 2,
+    },
+    remove : {
+        position: 'absolute',
+        right : 10,
+        top: 10,
+        zIndex : 99999,
+        width: 40,
+        height: 40,
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'flex-end'
     }
 });
 
@@ -128,6 +162,7 @@ function mapDispatchToProps(dispatch) {
             navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key : indice } }))
             
         }),
+        remove: (key) => removeBaralho(key),
     }
 }
 
