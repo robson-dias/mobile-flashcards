@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
-import { fetchBaralhos, addCard, removeCard, updateCard } from '../utils/api'
+import { fetchBaralhos, addCard, removeCard, updateCard, updateBaralho } from '../utils/api'
 import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './Cards'
 
@@ -15,11 +15,21 @@ class Baralho extends React.Component {
 
     componentDidMount() {
         this.setState({ scrollToEnd : false})
-        this.props.fetch()
+
+        this.props.navigation.setParams({
+            setTitle: this.setTitle
+        })
+
     }
 
     setTitle = (title) => {
-        this.setState({ title })
+
+        this.props.navigation.setParams({ title })
+
+        const { key } = this.props.navigation.state.params  
+
+        this.props.alterarBaralho(key, { title })
+
     }
 
     setPergunta = (props) => {
@@ -95,7 +105,6 @@ class Baralho extends React.Component {
                                     key={cardKey}
                                     baralhoKey={key}
                                     cardKey={cardKey}
-                                    setTitle={this.setTitle}
                                     pergunta={cards[cardKey].pergunta}
                                     resposta={cards[cardKey].resposta}
                                     toSetPergunta={this.setPergunta}
@@ -199,6 +208,7 @@ function mapDispatchToProps(dispatch) {
         add: (key) => addCard(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
         remove: (baralhoKey, cardKey) => removeCard(baralhoKey, cardKey).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
         alterarCartao: (baralhoKey, cardKey, data) => updateCard(baralhoKey, cardKey, data).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
+        alterarBaralho: (key, dados) => updateBaralho(key, dados).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
     }
 }
 

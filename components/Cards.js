@@ -10,7 +10,6 @@ export default class Cards extends React.Component {
     state = {
         flip: false,
         edit: false,
-        titulo: '',
         pergunta: '',
         resposta: ''
     }
@@ -73,7 +72,6 @@ export default class Cards extends React.Component {
 
         this.props.toSetResposta({baralhoKey, cardKey, resposta})
     }
-
 
     render() {
 

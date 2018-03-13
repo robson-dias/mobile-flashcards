@@ -27,6 +27,20 @@ export function removeBaralho(key) {
         })
 }
 
+export function updateBaralho(key, dados) {
+    return AsyncStorage.getItem(FLASHMOBILE_STORAGE_KEY)
+        .then((results) => {
+            const data = JSON.parse(results)
+
+            data[key] = {
+                ...data[key],
+                ...dados
+            }
+
+            AsyncStorage.setItem(FLASHMOBILE_STORAGE_KEY, JSON.stringify(data))
+        })
+}
+
 export function addCard(key) {
     return AsyncStorage.getItem(FLASHMOBILE_STORAGE_KEY)
         .then((results) => {
