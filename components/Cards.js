@@ -9,16 +9,28 @@ export default class Cards extends React.Component {
 
     state = {
         flip: false,
-        edit: false
+        edit: false,
+        titulo: '',
+        pergunta: '',
+        resposta: ''
     }
 
     componentWillMount() {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
 
         const { pergunta, resposta } = this.props
+
+        let edit = false
+
         if (!pergunta) {
-            this.setState({ edit : true })
+            let edit = true
         }
+
+        this.setState({ 
+            edit,
+            pergunta,
+            resposta
+        })
     }
 
     componentWillUnmount() {
@@ -45,9 +57,28 @@ export default class Cards extends React.Component {
         });
     }
 
+    setPergunta = (props) => {
+        const { baralhoKey, cardKey, pergunta } = props
+
+        this.setState({ pergunta })
+
+        this.props.toSetPergunta({baralhoKey, cardKey, pergunta})
+    }
+
+    setResposta = (props) => {
+
+        const { baralhoKey, cardKey, resposta } = props
+
+        this.setState({ resposta })
+
+        this.props.toSetResposta({baralhoKey, cardKey, resposta})
+    }
+
+
     render() {
 
-        const { baralhoKey, cardKey, pergunta, resposta, removeCard, setResposta, setPergunta } = this.props
+        const { baralhoKey, cardKey, removeCard } = this.props
+        const { pergunta, resposta } = this.state
 
         return (
             <FlipCard style={styles.flipCard}
@@ -82,7 +113,7 @@ export default class Cards extends React.Component {
                     {this.state.edit === true &&
                         <TextInput
                             style={styles.textInput}
-                            onChangeText={(pergunta) => setPergunta({indice, pergunta})}
+                            onChangeText={(pergunta) => this.setPergunta({ baralhoKey, cardKey, pergunta })}
                             value={pergunta}
                             placeholder={'Insira uma Pergunta'}
                             placeholderTextColor={'#967800'}
@@ -118,7 +149,7 @@ export default class Cards extends React.Component {
                     {this.state.edit === true &&
                         <TextInput
                             style={styles.textInput}
-                            onChangeText={(resposta) => setResposta({indice, resposta})}
+                            onChangeText={(resposta) => this.setResposta({ baralhoKey, cardKey, resposta})}
                             value={resposta}
                             placeholder={'Insira uma Resposta'}
                             placeholderTextColor={'#967800'}

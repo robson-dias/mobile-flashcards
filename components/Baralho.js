@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
-import { fetchBaralhos, addCard, removeCard } from '../utils/api'
+import { fetchBaralhos, addCard, removeCard, updateCard } from '../utils/api'
 import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './Cards'
 
@@ -23,19 +23,13 @@ class Baralho extends React.Component {
     }
 
     setPergunta = (props) => {
-        const { indice, pergunta } = props
-
-        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, pergunta: pergunta } : card)
-
-        this.setState({ cards })
+        const { baralhoKey, cardKey, pergunta } = props
+        this.props.alterarCartao(baralhoKey, cardKey, { pergunta })
     }
 
     setResposta = (props) => {
-        const { indice, resposta } = props
-
-        const cards = this.state.cards.map((card, indiceCard) => indiceCard === indice ? { ...card, resposta: resposta } : card)
-
-        this.setState({ cards })
+        const { baralhoKey, cardKey, resposta } = props
+        this.props.alterarCartao(baralhoKey, cardKey, { resposta })
     }
 
     removeCard = (baralhoKey, cardKey) => {
@@ -103,9 +97,9 @@ class Baralho extends React.Component {
                                     cardKey={cardKey}
                                     setTitle={this.setTitle}
                                     pergunta={cards[cardKey].pergunta}
-                                    setPergunta={this.setPergunta}
                                     resposta={cards[cardKey].resposta}
-                                    setResposta={this.setResposta}
+                                    toSetPergunta={this.setPergunta}
+                                    toSetResposta={this.setResposta}
                                     removeCard={this.removeCard}
                                 />  
                             )}
@@ -204,6 +198,7 @@ function mapDispatchToProps(dispatch) {
         fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
         add: (key) => addCard(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
         remove: (baralhoKey, cardKey) => removeCard(baralhoKey, cardKey).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
+        alterarCartao: (baralhoKey, cardKey, data) => updateCard(baralhoKey, cardKey, data).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
     }
 }
 
