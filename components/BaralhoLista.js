@@ -43,7 +43,7 @@ class BaralhoLista extends React.Component {
 
         Alert.alert(
             'Atenção!',
-            `Deseja remover esse baralho? ${key}`,
+            `Deseja remover esse baralho?`,
             [
                 { text: 'Não' },
                 {
@@ -75,7 +75,7 @@ class BaralhoLista extends React.Component {
                                 <Text style={styles.baralhoTitulo}>
                                     <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralhos[key].title}`}
                                 </Text>
-                                <Text style={styles.baralhoFlashcards}>{baralhos[key].cards.length} flashcards</Text>
+                                <Text style={styles.baralhoFlashcards}>{Object.keys(baralhos[key].cards).length} flashcards</Text>
                             </TouchableOpacity>
                         )}
                         <View style={{ height: 30 }}></View>

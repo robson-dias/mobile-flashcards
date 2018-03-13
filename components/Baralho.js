@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
-import { fetchBaralhos, addCard } from '../utils/api'
-import { FontAwesome } from '@expo/vector-icons'
+import { fetchBaralhos, addCard, removeCard } from '../utils/api'
+import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
 import Cards from './Cards'
 
 class Baralho extends React.Component {
@@ -38,18 +38,16 @@ class Baralho extends React.Component {
         this.setState({ cards })
     }
 
-    removeCard = (indice) => {
-        const { cards } = this.state
+    removeCard = (baralhoKey, cardKey) => {
 
         Alert.alert(
             'Atenção!',
-            'Deseja remover esse cartão?',
+            `Deseja remover esse cartão?`,
             [
                 { text: 'Não' },
                 { text: 'Sim', onPress: () => {
-                    const newCards = cards.filter((card, indiceCard) => indiceCard !== indice)
-
-                    this.setState({ cards: newCards })
+                    this.setState({ scrollToEnd: true })
+                    this.props.remove(baralhoKey, cardKey)
                 } },
             ],
             { cancelable: false }
@@ -63,7 +61,6 @@ class Baralho extends React.Component {
     }
 
     handleScroll = (event) =>{
-        //alert(JSON.stringify(event.nativeEvent.contentOffset))
         const { x } = event.nativeEvent.contentOffset
         const window = Dimensions.get('window')
         
@@ -74,7 +71,6 @@ class Baralho extends React.Component {
         } 
 
         this.setState({ pagina })
-
     }
 
     render() {
@@ -86,36 +82,41 @@ class Baralho extends React.Component {
             <View style={styles.container}>
                 
                 <View style={styles.containerFlip} >
-                    <ScrollView 
-                        horizontal={true} 
-                        pagingEnabled={true} 
-                        scrollsToTop={false} 
-                        showsHorizontalScrollIndicator={false} 
-                        ref={ref => this.scrollView = ref}
-                        onContentSizeChange={(contentWidth, contentHeight) => {
-                            this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
-                        }}
-                        onScroll={this.handleScroll}
-                        scrollEventThrottle={16}
-                    >
-                        
-                        {Object.keys(cards).length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
+                    {Object.keys(cards).length > 0 ? 
+                        <ScrollView 
+                            horizontal={true} 
+                            pagingEnabled={true} 
+                            scrollsToTop={false} 
+                            showsHorizontalScrollIndicator={false} 
+                            ref={ref => this.scrollView = ref}
+                            onContentSizeChange={(contentWidth, contentHeight) => {
+                                this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
+                            }}
+                            onScroll={this.handleScroll}
+                            scrollEventThrottle={16}
+                        >
+        
+                            {Object.keys(cards).length > 0 && Object.keys(cards).map((cardKey) => 
+                                <Cards
+                                    key={cardKey}
+                                    baralhoKey={key}
+                                    cardKey={cardKey}
+                                    setTitle={this.setTitle}
+                                    pergunta={cards[cardKey].pergunta}
+                                    setPergunta={this.setPergunta}
+                                    resposta={cards[cardKey].resposta}
+                                    setResposta={this.setResposta}
+                                    removeCard={this.removeCard}
+                                />  
+                            )}
+                                
 
-                        {Object.keys(cards).length > 0 && Object.keys(cards).map((indice) => 
-                            <Cards
-                                key={indice}
-                                indice={indice}
-                                setTitle={this.setTitle}
-                                pergunta={cards[indice].pergunta}
-                                setPergunta={this.setPergunta}
-                                resposta={cards[indice].resposta}
-                                setResposta={this.setResposta}
-                                removeCard={this.removeCard}
-                            />  
-                        )}
-                            
-
-                    </ScrollView>
+                        </ScrollView>
+                    : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                            <MaterialCommunityIcons name='cards' size={200} color={'#CCC'} />
+                            <Text style={{ color: '#CCC' }}>Nenhuma Carta Cadastrado.</Text>
+                        </View>
+                    }
                 </View>
 
                 <View style={styles.footer}>
@@ -202,6 +203,7 @@ function mapDispatchToProps(dispatch) {
     return {
         fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
         add: (key) => addCard(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
+        remove: (baralhoKey, cardKey) => removeCard(baralhoKey, cardKey).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
     }
 }
 

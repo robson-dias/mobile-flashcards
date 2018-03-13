@@ -44,4 +44,16 @@ export function addCard(key) {
         })
 }
 
+export function removeCard(baralhoKey, cardKey) {
+    return AsyncStorage.getItem(FLASHMOBILE_STORAGE_KEY)
+        .then((results) => {
+            const data = JSON.parse(results)
+
+            data[baralhoKey].cards[cardKey] = undefined
+            delete data[baralhoKey].cards[cardKey]
+
+            AsyncStorage.setItem(FLASHMOBILE_STORAGE_KEY, JSON.stringify(data))
+        })
+}
+
 

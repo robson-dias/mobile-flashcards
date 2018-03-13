@@ -42,8 +42,7 @@ export default class Cards extends React.Component {
 
     render() {
 
-        const { indice, pergunta, resposta, removeCard, setResposta, setPergunta } = this.props
-        const numberCard = indice + 1
+        const { baralhoKey, cardKey, pergunta, resposta, removeCard, setResposta, setPergunta } = this.props
 
         return (
             <FlipCard style={styles.flipCard}
@@ -57,7 +56,7 @@ export default class Cards extends React.Component {
 
                 <View style={styles.baralho}>
                     <View style={styles.editContainerButton}>
-                        <TouchableOpacity onPress={() => removeCard(indice)} style={styles.editButton}>
+                        <TouchableOpacity onPress={() => removeCard(baralhoKey, cardKey)} style={styles.editButton}>
                             <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
                         </TouchableOpacity>
 
