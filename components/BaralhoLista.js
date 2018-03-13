@@ -5,6 +5,7 @@ import { addBaralho, receiveBaralhos, deleteBaralho } from '../actions'
 import { submitBaralho, fetchBaralhos, removeBaralho } from '../utils/api'
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
+import uuid from 'uuid'
 
 
 class BaralhoLista extends React.Component {
@@ -24,10 +25,10 @@ class BaralhoLista extends React.Component {
 
     toAddFlashcards = () => {
 
-        const indice = Object.keys(this.props.baralhos).length
+        const key = uuid();
 
-        const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
-            title: 'ROBSON TESTANDO A PARADA TODA',
+        const newBaralhos = Object.assign(this.props.baralhos, {[key] : {
+            title: '',
             cards: [{
                 pergunta: '',
                 resposta: ''
