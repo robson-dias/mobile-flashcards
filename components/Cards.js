@@ -107,7 +107,7 @@ export default class Cards extends React.Component {
 
                     {this.state.edit === false &&
                         <Text style={styles.text} onPress={this.onEdit}>
-                        {pergunta}
+                        {pergunta || <Text style={{ color: '#967800'}}>{'Toque aqui e insira uma pergunta'}</Text> }
                         </Text>
                     }
                     {this.state.edit === true &&
@@ -143,7 +143,7 @@ export default class Cards extends React.Component {
 
                     {this.state.edit === false &&
                         <Text style={styles.text} onPress={this.onEdit}>
-                        {resposta}
+                        {resposta || <Text style={{ color: '#967800' }}>{'Toque aqui e insira uma resposta'}</Text>}
                         </Text>
                     }
                     {this.state.edit === true &&
