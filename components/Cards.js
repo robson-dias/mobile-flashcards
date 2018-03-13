@@ -61,7 +61,7 @@ export default class Cards extends React.Component {
                             <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
                         </TouchableOpacity>
 
-                        <Text style={styles.titleBaralho}>Front {numberCard}</Text>
+                        <Text style={styles.titleBaralho}>Front</Text>
 
                         <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
                             <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
@@ -97,7 +97,7 @@ export default class Cards extends React.Component {
                             <FontAwesome name='trash' size={30} color={'#3b3b3b'} />
                         </TouchableOpacity>
 
-                        <Text style={styles.titleBaralho}>Back {numberCard}</Text>
+                        <Text style={styles.titleBaralho}>Back</Text>
 
                         <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
                             <TouchableOpacity onPress={this.onEdit} style={styles.editButton}>
@@ -183,5 +183,6 @@ const styles = StyleSheet.create({
         padding: 10,
         color: '#878787',
         fontWeight: 'bold',
+        color: '#967800'
     }
 })

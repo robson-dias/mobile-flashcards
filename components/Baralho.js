@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
-import { fetchBaralhos } from '../utils/api'
+import { fetchBaralhos, addCard } from '../utils/api'
 import { FontAwesome } from '@expo/vector-icons'
 import Cards from './Cards'
 
@@ -51,6 +51,10 @@ class Baralho extends React.Component {
 
     }
 
+    toAddCard = (key) => {
+        this.props.add(key)
+    }
+
     render() {
 
         const { key } = this.props.navigation.state.params        
@@ -62,16 +66,16 @@ class Baralho extends React.Component {
                 <View style={styles.containerFlip} >
                     <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false}>
                         
-                        {cards.length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
+                        {Object.keys(cards).length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
 
-                        {cards.length > 0 && cards.map((card, indice) => 
+                        {Object.keys(cards).length > 0 && Object.keys(cards).map((indice) => 
                             <Cards
                                 key={indice}
                                 indice={indice}
                                 setTitle={this.setTitle}
-                                pergunta={card.pergunta}
+                                pergunta={cards[indice].pergunta}
                                 setPergunta={this.setPergunta}
-                                resposta={card.resposta}
+                                resposta={cards[indice].resposta}
                                 setResposta={this.setResposta}
                                 removeCard={this.removeCard}
                             />  
@@ -84,18 +88,18 @@ class Baralho extends React.Component {
                 <View style={styles.footer}>
 
                     <TouchableOpacity>
-                        <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />
+                        <FontAwesome name='play-circle' size={60} style={styles.footerButtom}/>
                     </TouchableOpacity>   
 
                     <Text style={styles.numeroCartas}>
                         <Text>
-                            1/6{"\n"}
+                            1/{Object.keys(cards).length}{"\n"}
                             Flashcards
                         </Text>
                     </Text>
 
                     <TouchableOpacity>
-                        <FontAwesome name='plus-circle' size={60} style={styles.footerButtom} />
+                        <FontAwesome name='plus-circle' size={60} style={styles.footerButtom} onPress={() => this.toAddCard(key)}/>
                     </TouchableOpacity>   
 
                 </View>
@@ -163,7 +167,8 @@ function mapStateToProps(baralhos) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))
+        fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
+        add: (key) => addCard(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
     }
 }
 

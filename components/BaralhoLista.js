@@ -25,14 +25,14 @@ class BaralhoLista extends React.Component {
 
     toAddFlashcards = () => {
 
-        const key = uuid();
+        const indice = uuid()
 
-        const newBaralhos = Object.assign(this.props.baralhos, {[key] : {
+        const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
             title: '',
-            cards: [{
+            cards: {[uuid()] : {
                 pergunta: '',
                 resposta: ''
-            }]
+            }}
         }})
 
         this.props.add(newBaralhos, indice, this.props.navigation)
@@ -135,11 +135,12 @@ const styles = StyleSheet.create({
     },
     remove : {
         position: 'absolute',
-        right : 10,
-        top: 10,
+        right : 0,
+        top: 0,
+        padding: 10,
         zIndex : 99999,
-        width: 40,
-        height: 40,
+        width: 45,
+        height: 50,
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'flex-end'

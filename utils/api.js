@@ -1,4 +1,5 @@
 import { AsyncStorage } from 'react-native'
+import uuid from 'uuid'
 
 export const FLASHMOBILE_STORAGE_KEY = 'Robson:flashmobile'
 
@@ -25,4 +26,22 @@ export function removeBaralho(key) {
             AsyncStorage.setItem(FLASHMOBILE_STORAGE_KEY, JSON.stringify(data))
         })
 }
+
+export function addCard(key) {
+    return AsyncStorage.getItem(FLASHMOBILE_STORAGE_KEY)
+        .then((results) => {
+            const data = JSON.parse(results)
+
+            data[key].cards = {
+                ...data[key].cards,
+                [uuid()] : {
+                    pergunta: '',
+                    resposta: ''
+                }
+            }
+
+            AsyncStorage.setItem(FLASHMOBILE_STORAGE_KEY, JSON.stringify(data))
+        })
+}
+
 
