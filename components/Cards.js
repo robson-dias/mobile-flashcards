@@ -81,6 +81,7 @@ export default class Cards extends React.Component {
                             onChangeText={(pergunta) => setPergunta({indice, pergunta})}
                             value={pergunta}
                             placeholder={'Insira uma Pergunta'}
+                            placeholderTextColor={'#967800'}
                         />
                     }
 
@@ -116,6 +117,7 @@ export default class Cards extends React.Component {
                             onChangeText={(resposta) => setResposta({indice, resposta})}
                             value={resposta}
                             placeholder={'Insira uma Resposta'}
+                            placeholderTextColor={'#967800'}
                         />
                     }
 
