@@ -1,72 +1,84 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView } from 'react-native';
 import { connect } from 'react-redux'
-import { receiveBaralhos } from '../actions'
+import { addBaralho, addBaralhos, receiveBaralhos } from '../actions'
+import { submitBaralho, fetchBaralhos } from '../utils/api'
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
 
-const baralhosData = [
+const baralhosData1 = [
     {
-        title: 'Titulo FlashCards',
+        title: 'A1',
         cards: [{
-            pergunta: 'Pergunta 1',
-            resposta: 'Resposta 1'
-        },
-        {
-            pergunta: 'Pergunta 2',
-            resposta: 'Resposta 2'
-        },
-        {
-            pergunta: 'Pergunta 3',
-            resposta: 'Resposta 3'
+            pergunta: 'PA',
+            resposta: 'RA'
         }]
     },
     {
-        title: 'Titulo FlashCards 2',
+        title: 'A1',
         cards: [{
-            pergunta: 'Pergunta 1',
-            resposta: 'Resposta 1'
-        },
-        {
-            pergunta: 'Pergunta 2',
-            resposta: 'Resposta 2'
-        },
-        {
-            pergunta: 'Pergunta 3',
-            resposta: 'Resposta 3'
+            pergunta: 'PA',
+            resposta: 'RA'
         }]
     }
 ]
+
+const baralhoData = 
+    {
+        title: 'A2',
+        cards: [{
+            pergunta: 'PA',
+            resposta: 'RA'
+        }]
+    };
+
 
 
 class BaralhoLista extends React.Component {
     
     componentDidMount() {
-        const { dispatch } = this.props
-
-        dispatch(receiveBaralhos(baralhosData))
+        this.props.fetch()
     }
 
-    toFlashcards = (baralho) => {
-        
-        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: baralho.title }}))
+    toFlashcards = (key) => {
+
+        const { baralhos } = this.props
+        const { title } = baralhos[key]
+
+        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title, key } }))
+
+    }
+
+    toAddFlashcards = () => {
+
+        const indice = Object.keys(this.props.baralhos).length
+
+        const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
+            title: `Baralho ${indice}`,
+            cards: [{
+                pergunta: '',
+                resposta: ''
+            }]
+        }})
+
+        this.props.add(newBaralhos, indice, this.props.navigation)
+
     }
 
     render() {
 
         const { baralhos } = this.props
 
-
         return (
             <View style={styles.container} >
-                {baralhos.length > 0 ? 
+                {Object.keys(baralhos).length > 0 ? 
                     <ScrollView style={{ flex: 1}}>
-                        {baralhos.map((baralho, key) =>
-                            <TouchableOpacity key={key} style={styles.baralho} onPress={() => this.toFlashcards(baralho)}>
+                        {Object.keys(baralhos).map((key) =>
+                            <TouchableOpacity key={key} style={styles.baralho} onPress={() => this.toFlashcards(key)}>
                                 <Text style={styles.baralhoTitulo}>
-                                    <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralho.title}`}
+                                    <FontAwesome name='chevron-circle-right' size={18} color='#3b3b3b' />{` ${baralhos[key].title}`}
                                 </Text>
-                                <Text style={styles.baralhoFlashcards}>{baralho.cards.length} flashcards</Text>
+                                <Text style={styles.baralhoFlashcards}>{baralhos[key].cards.length} flashcards</Text>
                             </TouchableOpacity>
                         )}
                         <View style={{ height: 30 }}></View>
@@ -77,7 +89,7 @@ class BaralhoLista extends React.Component {
                     </View>
                 }
 
-                <TouchableOpacity style={styles.botaoAdd} onPress={this.toFlashcards}>
+                <TouchableOpacity style={styles.botaoAdd} onPress={this.toAddFlashcards}>
                     <Text>
                         <FontAwesome name='plus' size={15} color='#fff' />
                     </Text>
@@ -127,11 +139,26 @@ const styles = StyleSheet.create({
 });
 
 function mapStateToProps(baralhos) {
+    
     return {
         baralhos
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return {
+        fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
+        add: (baralhos, indice, navigation) => submitBaralho(baralhos).then(() => {
+          
+            const { title } = baralhos[indice]
+
+            navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key : indice } }))
+            
+        }),
+    }
+}
+
 export default connect(
     mapStateToProps,
+    mapDispatchToProps
 )(BaralhoLista)

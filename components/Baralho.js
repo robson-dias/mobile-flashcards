@@ -1,24 +1,15 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { connect } from 'react-redux'
+import { receiveBaralhos } from '../actions'
+import { fetchBaralhos } from '../utils/api'
 import { FontAwesome } from '@expo/vector-icons'
 import Cards from './Cards'
 
-export default class Baralho extends React.Component {
+class Baralho extends React.Component {
 
-    state = {
-        title: 'Titulo FlashCards',
-        cards : [{
-            pergunta: 'Pergunta 1',
-            resposta: 'Resposta 1' 
-        },
-        {
-            pergunta: 'Pergunta 2',
-            resposta: 'Resposta 2'
-        },
-        {
-            pergunta: 'Pergunta 3',
-            resposta: 'Resposta 3'
-        }]
+    componentDidMount() {
+        this.props.fetch()
     }
 
     setTitle = (title) => {
@@ -62,7 +53,8 @@ export default class Baralho extends React.Component {
 
     render() {
 
-        const { cards } = this.state
+        const { key } = this.props.navigation.state.params        
+        const { cards } = this.props.baralhos[key] || {}
 
         return (
             <View style={styles.container}>
@@ -160,4 +152,23 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     }
 })
+
+
+function mapStateToProps(baralhos) {
+
+    return {
+        baralhos
+    }
+}
+
+function mapDispatchToProps(dispatch) {
+    return {
+        fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Baralho)
 
