@@ -8,7 +8,12 @@ import Cards from './Cards'
 
 class Baralho extends React.Component {
 
+    state = {
+        scrollToEnd : false
+    }
+
     componentDidMount() {
+        this.setState({ scrollToEnd : false})
         this.props.fetch()
     }
 
@@ -52,6 +57,7 @@ class Baralho extends React.Component {
     }
 
     toAddCard = (key) => {
+        this.setState({ scrollToEnd: true })
         this.props.add(key)
     }
 
@@ -64,7 +70,11 @@ class Baralho extends React.Component {
             <View style={styles.container}>
                 
                 <View style={styles.containerFlip} >
-                    <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false}>
+                    <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false} 
+                    ref={ref => this.scrollView = ref}
+                    onContentSizeChange={(contentWidth, contentHeight) => {
+                        this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
+                    }}>
                         
                         {Object.keys(cards).length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
 
