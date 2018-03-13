@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
 import { fetchBaralhos, addCard, removeCard } from '../utils/api'
-import { FontAwesome, MaterialCommunityIcons } from '@expo/vector-icons'
+import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './Cards'
 
 class Baralho extends React.Component {
@@ -114,7 +114,7 @@ class Baralho extends React.Component {
                         </ScrollView>
                     : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                             <MaterialCommunityIcons name='cards' size={200} color={'#CCC'} />
-                            <Text style={{ color: '#CCC' }}>Nenhuma Carta Cadastrado.</Text>
+                            <Text style={{ color: '#CCC' }}>Nenhuma Carta Cadastrada.</Text>
                         </View>
                     }
                 </View>
@@ -132,8 +132,8 @@ class Baralho extends React.Component {
                         </Text>
                     </Text>
 
-                    <TouchableOpacity>
-                        <FontAwesome name='plus-circle' size={60} style={styles.footerButtom} onPress={() => this.toAddCard(key)}/>
+                    <TouchableOpacity onPress={() => this.toAddCard(key)}>
+                        <Ionicons name='ios-add-circle' size={60} style={styles.footerButtom}/>
                     </TouchableOpacity>   
 
                 </View>

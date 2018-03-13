@@ -9,11 +9,16 @@ export default class Cards extends React.Component {
 
     state = {
         flip: false,
-        edit: true
+        edit: false
     }
 
     componentWillMount() {
         this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
+
+        const { pergunta, resposta } = this.props
+        if (!pergunta) {
+            this.setState({ edit : true })
+        }
     }
 
     componentWillUnmount() {

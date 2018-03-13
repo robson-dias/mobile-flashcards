@@ -82,14 +82,13 @@ class BaralhoLista extends React.Component {
                     </ScrollView>
                 : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                         <MaterialCommunityIcons name='cards' size={200} color={'#CCC'} />
-                        <Text style={{ color: '#CCC' }}>Nenhum baralho Cadastrado.</Text>
+                        <Text style={{ color: '#CCC' }}>Nenhum baralho cadastrado.</Text>
                     </View>
                 }
 
                 <TouchableOpacity style={styles.botaoAdd} onPress={this.toAddFlashcards}>
-                    <Text>
-                        <FontAwesome name='plus' size={15} color='#fff' />
-                    </Text>
+                    <View style={styles.botaoAddBackground}></View>
+                    <Ionicons name='ios-add-circle' size={60} color="green" style={{color: '#ef0404',elevation: 2}} />
                 </TouchableOpacity>
                 
             </View>
@@ -123,15 +122,17 @@ const styles = StyleSheet.create({
     },
     botaoAdd : {
         position: 'absolute',
-        backgroundColor: '#ef0404',
-        borderRadius: 30,
-        paddingTop: 23,
-        paddingBottom: 23,
-        paddingRight: 25,
-        paddingLeft: 25,
         bottom : 20,
         right: 25,
-        elevation: 2,
+        borderRadius: 50,
+    },
+    botaoAddBackground: {
+        backgroundColor: 'white',
+        width: 30,
+        height: 40,
+        position: 'absolute',
+        right: 10,
+        top: 10,
     },
     remove : {
         position: 'absolute',
