@@ -1,4 +1,4 @@
-import { ADD_BARALHO, RECEIVE_BARALHOS } from '../actions'
+import { ADD_BARALHO, RECEIVE_BARALHOS, DELETE_BARALHO } from '../actions'
 
 function baralhos(state = {}, action) {
 
@@ -9,6 +9,10 @@ function baralhos(state = {}, action) {
                 ...state,
                 ...action.baralhos,
             }
+
+        case DELETE_BARALHO:
+
+            return action.baralhos
 
         case ADD_BARALHO:
 

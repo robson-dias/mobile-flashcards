@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import { connect } from 'react-redux'
-import { addBaralho, receiveBaralhos } from '../actions'
+import { addBaralho, receiveBaralhos, deleteBaralho } from '../actions'
 import { submitBaralho, fetchBaralhos, removeBaralho } from '../utils/api'
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons'
 import { NavigationActions } from 'react-navigation'
@@ -162,7 +162,7 @@ function mapDispatchToProps(dispatch) {
             navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key : indice } }))
             
         }),
-        remove: (key) => removeBaralho(key),
+        remove: (key) => removeBaralho(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(deleteBaralho(baralhos)))),
     }
 }
 
