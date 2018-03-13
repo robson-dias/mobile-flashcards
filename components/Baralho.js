@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert} from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
 import { fetchBaralhos, addCard } from '../utils/api'
@@ -9,7 +9,8 @@ import Cards from './Cards'
 class Baralho extends React.Component {
 
     state = {
-        scrollToEnd : false
+        scrollToEnd : false,
+        pagina: 1
     }
 
     componentDidMount() {
@@ -61,6 +62,21 @@ class Baralho extends React.Component {
         this.props.add(key)
     }
 
+    handleScroll = (event) =>{
+        //alert(JSON.stringify(event.nativeEvent.contentOffset))
+        const { x } = event.nativeEvent.contentOffset
+        const window = Dimensions.get('window')
+        
+        let pagina = 1;
+        
+        if (x > 0) {
+            pagina = Math.round(x / window.width) + 1
+        } 
+
+        this.setState({ pagina })
+
+    }
+
     render() {
 
         const { key } = this.props.navigation.state.params        
@@ -70,11 +86,18 @@ class Baralho extends React.Component {
             <View style={styles.container}>
                 
                 <View style={styles.containerFlip} >
-                    <ScrollView horizontal={true} pagingEnabled={true} scrollsToTop={false} showsHorizontalScrollIndicator={false} 
-                    ref={ref => this.scrollView = ref}
-                    onContentSizeChange={(contentWidth, contentHeight) => {
-                        this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
-                    }}>
+                    <ScrollView 
+                        horizontal={true} 
+                        pagingEnabled={true} 
+                        scrollsToTop={false} 
+                        showsHorizontalScrollIndicator={false} 
+                        ref={ref => this.scrollView = ref}
+                        onContentSizeChange={(contentWidth, contentHeight) => {
+                            this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
+                        }}
+                        onScroll={this.handleScroll}
+                        scrollEventThrottle={16}
+                    >
                         
                         {Object.keys(cards).length === 0 && <FontAwesome name='play-circle' size={60} style={styles.footerButtom} />}
 
@@ -103,7 +126,7 @@ class Baralho extends React.Component {
 
                     <Text style={styles.numeroCartas}>
                         <Text>
-                            1/{Object.keys(cards).length}{"\n"}
+                            {this.state.pagina}/{Object.keys(cards).length}{"\n"}
                             Flashcards
                         </Text>
                     </Text>
