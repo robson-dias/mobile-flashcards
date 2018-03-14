@@ -9,7 +9,7 @@ export default class QuizResults extends React.Component {
 
     toQuiz = () => {
         const { title, key } = this.props.navigation.state.params
-
+        this.props.navigation.dispatch(NavigationActions.back({ routeName: 'Quiz'}))
         this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Quiz', params: { title, key } }))
     }
 
