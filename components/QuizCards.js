@@ -8,36 +8,7 @@ const {height, width} = Dimensions.get('window')
 export default class QuizCards extends React.Component {
 
     state = {
-        flip: false,
-        edit: false,
-        pergunta: '',
-        resposta: ''
-    }
-
-    componentWillMount() {
-        this.keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', this._keyboardDidHide);
-
-        const { pergunta, resposta } = this.props
-
-        let edit = false
-
-        if (!pergunta) {
-            let edit = true
-        }
-
-        this.setState({ 
-            edit,
-            pergunta,
-            resposta
-        })
-    }
-
-    componentWillUnmount() {
-        this.keyboardDidHideListener.remove();
-    }
-
-    _keyboardDidHide = () => {
-        this.setState({ edit: false })
+        flip: false
     }
 
     onFlip = () => {
@@ -48,35 +19,9 @@ export default class QuizCards extends React.Component {
         });
     }
 
-    onEdit = () => {
-        this.setState(function (state, props) {
-            return {
-                edit: state.edit === true ? false : true
-            }
-        });
-    }
-
-    setPergunta = (props) => {
-        const { baralhoKey, cardKey, pergunta } = props
-
-        this.setState({ pergunta })
-
-        this.props.toSetPergunta({baralhoKey, cardKey, pergunta})
-    }
-
-    setResposta = (props) => {
-
-        const { baralhoKey, cardKey, resposta } = props
-
-        this.setState({ resposta })
-
-        this.props.toSetResposta({baralhoKey, cardKey, resposta})
-    }
-
     render() {
 
-        const { baralhoKey, cardKey, removeCard, pagina, cardsTotal, toNext } = this.props
-        const { pergunta, resposta } = this.state
+        const { pergunta, resposta, pagina, cardsTotal, toNext } = this.props
 
         return (
             <View>
@@ -126,7 +71,7 @@ export default class QuizCards extends React.Component {
 
                 <View style={styles.footer}>
 
-                    <TouchableOpacity onPress={() => toNext()}>
+                    <TouchableOpacity onPress={() => toNext(0)}>
                         <MaterialIcons name='cancel' size={60} color={'#ef0404'} />
                     </TouchableOpacity>
 
@@ -137,7 +82,7 @@ export default class QuizCards extends React.Component {
                             </Text>
                     </Text>
 
-                    <TouchableOpacity onPress={() => toNext()}>
+                    <TouchableOpacity onPress={() => toNext(1)}>
                         <Ionicons name='ios-checkmark-circle' size={60} color={'green'} />
                     </TouchableOpacity>
 

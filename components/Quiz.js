@@ -5,15 +5,26 @@ import { receiveBaralhos } from '../actions'
 import { fetchBaralhos } from '../utils/api'
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './QuizCards'
+import QuizResult from './QuizResult'
 
 class Quiz extends React.Component {
 
     state = {
-        pagina: 1
+        pagina: 1,
+        totalPerguntas: 0,
+        totalRespostasCorretas: 0
+
     }
 
     componentDidMount() {
-        this.props.fetch()
+        this.props.fetch().then(() => {
+            const { key } = this.props.navigation.state.params  
+            const { cards } = this.props.baralhos[key] || {}
+
+            const totalPerguntas = Object.keys(cards).length
+
+            this.setState({ totalPerguntas })
+        })
     }
 
     handleScroll = (event) => {
@@ -29,17 +40,23 @@ class Quiz extends React.Component {
         this.setState({ pagina })
     }
 
-    toNext = () => {
+    toNext = (isCorrect) => {
         const window = Dimensions.get('window')
         const scrollToPage = this.state.pagina * window.width        
         this.scrollView.scrollTo({ x: scrollToPage, y: 0, animated: true });
+
+        if (isCorrect) {
+            this.setState((state) => {
+                return { totalRespostasCorretas: state.totalRespostasCorretas + 1 }
+            })
+        }
     }
 
     render() {
 
         const { key } = this.props.navigation.state.params        
         const { cards } = this.props.baralhos[key] || {}
-        const { scrollToPage, pagina } = this.state
+        const { scrollToPage, pagina, totalPerguntas, totalRespostasCorretas } = this.state
 
         return (
             <View style={styles.container}>
@@ -69,11 +86,15 @@ class Quiz extends React.Component {
                                     toSetResposta={this.setResposta}
                                     removeCard={this.removeCard}
                                     pagina={pagina}
-                                    cardsTotal={Object.keys(cards).length}
+                                    cardsTotal={totalPerguntas}
                                     toNext={this.toNext}
                                 />  
                             )}
                                 
+                            <QuizResult 
+                                totalPerguntas={totalPerguntas}
+                                totalRespostasCorretas={totalRespostasCorretas}
+                            />
 
                         </ScrollView>
                     : <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
