@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
-import { fetchBaralhos, addCard, removeCard, updateCard, updateBaralho } from '../utils/api'
+import { fetchBaralhos } from '../utils/api'
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './QuizCards'
 
@@ -29,10 +29,17 @@ class Quiz extends React.Component {
         this.setState({ pagina })
     }
 
+    toNext = () => {
+        const window = Dimensions.get('window')
+        const scrollToPage = this.state.pagina * window.width        
+        this.scrollView.scrollTo({ x: scrollToPage, y: 0, animated: true });
+    }
+
     render() {
 
         const { key } = this.props.navigation.state.params        
         const { cards } = this.props.baralhos[key] || {}
+        const { scrollToPage, pagina } = this.state
 
         return (
             <View style={styles.container}>
@@ -40,14 +47,17 @@ class Quiz extends React.Component {
                 <View style={styles.containerFlip} >
                     {Object.keys(cards).length > 0 ? 
                         <ScrollView 
+                            scrollEnabled={false}
                             horizontal={true} 
                             pagingEnabled={true} 
                             scrollsToTop={false} 
                             showsHorizontalScrollIndicator={false} 
                             onScroll={this.handleScroll}
                             scrollEventThrottle={16}
+                            ref={ref => this.scrollView = ref}
                         >
         
+
                             {Object.keys(cards).length > 0 && Object.keys(cards).map((cardKey) => 
                                 <Cards
                                     key={cardKey}
@@ -58,6 +68,9 @@ class Quiz extends React.Component {
                                     toSetPergunta={this.setPergunta}
                                     toSetResposta={this.setResposta}
                                     removeCard={this.removeCard}
+                                    pagina={pagina}
+                                    cardsTotal={Object.keys(cards).length}
+                                    toNext={this.toNext}
                                 />  
                             )}
                                 
@@ -70,24 +83,7 @@ class Quiz extends React.Component {
                     }
                 </View>
 
-                <View style={styles.footer}>
-
-                    <TouchableOpacity>
-                        <MaterialIcons name='cancel' size={60} color={'#ef0404'}/>
-                    </TouchableOpacity>   
-
-                    <Text style={styles.numeroCartas}>
-                        <Text>
-                            {this.state.pagina}/{Object.keys(cards).length}{"\n"}
-                            Cards
-                        </Text>
-                    </Text>
-
-                    <TouchableOpacity>
-                        <Ionicons name='ios-checkmark-circle' size={60} color={'green'}/>
-                    </TouchableOpacity>   
-
-                </View>
+                
             </View>
         );
     }
@@ -102,19 +98,6 @@ const styles = StyleSheet.create({
     containerFlip: {
         flex: 5,
         backgroundColor: '#000',
-    },
-    footer: {
-        flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        height: 50,
-    },
-    numeroCartas: {
-        textAlign: 'center',
-        textAlignVertical: 'center',
-        fontWeight: 'bold',
-        fontSize: 12,
-        color: '#fff',
     },
     textInput: {
         fontWeight: 'bold',

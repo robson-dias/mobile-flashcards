@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, TouchableOpacity, TextInput, Keyboard, Dimensions } from 'react-native';
 import FlipCard from 'react-native-flip-card'
-import { FontAwesome } from '@expo/vector-icons'
+import { FontAwesome, MaterialIcons, Ionicons } from '@expo/vector-icons'
 
 const {height, width} = Dimensions.get('window')
 
@@ -75,59 +75,81 @@ export default class QuizCards extends React.Component {
 
     render() {
 
-        const { baralhoKey, cardKey, removeCard } = this.props
+        const { baralhoKey, cardKey, removeCard, pagina, cardsTotal, toNext } = this.props
         const { pergunta, resposta } = this.state
 
         return (
-            <FlipCard style={styles.flipCard}
-                friction={6}
-                perspective={1000}
-                flipHorizontal={true}
-                flipVertical={false}
-                flip={this.state.flip}
-                clickable={false}
-            >
+            <View>
+                <FlipCard style={styles.flipCard}
+                    friction={6}
+                    perspective={1000}
+                    flipHorizontal={true}
+                    flipVertical={false}
+                    flip={this.state.flip}
+                    clickable={false}
+                >
 
-                <View style={styles.baralho}>
-                    <View style={styles.editContainerButton}>
-                        <Text style={styles.titleBaralho}>Front</Text>
-                    </View>
+                    <View style={styles.baralho}>
+                        <View style={styles.editContainerButton}>
+                            <Text style={styles.titleBaralho}>Front</Text>
+                        </View>
 
-                   
-                    <Text style={styles.text}>
-                        {pergunta || <Text style={{ color: '#967800'}}>{'Nenhuma pergunta inserida'}</Text> }
-                    </Text>
                     
+                        <Text style={styles.text}>
+                            {pergunta || <Text style={{ color: '#967800'}}>{'Nenhuma pergunta inserida'}</Text> }
+                        </Text>
+                        
 
-                    <View style={styles.rotateContainerButton}>
-                        <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                            <FontAwesome name='rotate-right' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
+                        <View style={styles.rotateContainerButton}>
+                            <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                                <FontAwesome name='rotate-right' size={30} color={'#3b3b3b'} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </View>
-                <View style={styles.baralho}>
-                    <View style={styles.editContainerButton}>
-                        <Text style={styles.titleBaralho}>Back</Text>
+                    <View style={styles.baralho}>
+                        <View style={styles.editContainerButton}>
+                            <Text style={styles.titleBaralho}>Back</Text>
+                        </View>
+
+                        <Text style={styles.text}>
+                            {resposta || <Text style={{ color: '#967800' }}>{'Nenhuma resposta inserida'}</Text>}
+                        </Text>
+
+                        <View style={styles.rotateContainerButton}>
+                            <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
+                                <FontAwesome name='rotate-left' size={30} color={'#3b3b3b'} />
+                            </TouchableOpacity>
+                        </View>
                     </View>
 
-                    <Text style={styles.text}>
-                        {resposta || <Text style={{ color: '#967800' }}>{'Nenhuma resposta inserida'}</Text>}
+                </FlipCard>
+
+                <View style={styles.footer}>
+
+                    <TouchableOpacity onPress={() => toNext()}>
+                        <MaterialIcons name='cancel' size={60} color={'#ef0404'} />
+                    </TouchableOpacity>
+
+                    <Text style={styles.numeroCartas}>
+                        <Text>
+                            {pagina}/{cardsTotal}{"\n"}
+                            Cards
+                            </Text>
                     </Text>
 
-                    <View style={styles.rotateContainerButton}>
-                        <TouchableOpacity onPress={this.onFlip} style={styles.rotateButton}>
-                            <FontAwesome name='rotate-left' size={30} color={'#3b3b3b'} />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+                    <TouchableOpacity onPress={() => toNext()}>
+                        <Ionicons name='ios-checkmark-circle' size={60} color={'green'} />
+                    </TouchableOpacity>
 
-            </FlipCard>
+                </View>
+            </View>
         )
     }
 }
 
 const styles = StyleSheet.create({
     flipCard: {
+        flex: 5,
         borderColor: '#000',
         width: width,
     },
@@ -177,5 +199,18 @@ const styles = StyleSheet.create({
         color: '#878787',
         fontWeight: 'bold',
         color: '#967800'
-    }
+    },
+    footer: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        height: 50,
+    },
+    numeroCartas: {
+        textAlign: 'center',
+        textAlignVertical: 'center',
+        fontWeight: 'bold',
+        fontSize: 12,
+        color: '#fff',
+    },
 })
