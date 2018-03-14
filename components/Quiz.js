@@ -1,85 +1,30 @@
 import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Alert, Dimensions} from 'react-native';
-import { NavigationActions } from 'react-navigation'
 import { connect } from 'react-redux'
 import { receiveBaralhos } from '../actions'
 import { fetchBaralhos, addCard, removeCard, updateCard, updateBaralho } from '../utils/api'
-import { FontAwesome, MaterialCommunityIcons, Ionicons } from '@expo/vector-icons'
-import Cards from './Cards'
+import { MaterialIcons, Ionicons } from '@expo/vector-icons'
+import Cards from './QuizCards'
 
-class Baralho extends React.Component {
+class Quiz extends React.Component {
 
     state = {
-        scrollToEnd : false,
         pagina: 1
     }
 
     componentDidMount() {
-        this.setState({ scrollToEnd : false})
-
-        this.props.navigation.setParams({
-            setTitle: this.setTitle
-        })
-
+        this.props.fetch()
     }
 
-    toQuiz= (key) => {
-        const { baralhos } = this.props
-        const { title } = baralhos[key]
-        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Quiz', params: { title, key } }))
-    }
-
-    setTitle = (title) => {
-
-        this.props.navigation.setParams({ title })
-
-        const { key } = this.props.navigation.state.params  
-
-        this.props.alterarBaralho(key, { title })
-
-    }
-
-    setPergunta = (props) => {
-        const { baralhoKey, cardKey, pergunta } = props
-        this.props.alterarCartao(baralhoKey, cardKey, { pergunta })
-    }
-
-    setResposta = (props) => {
-        const { baralhoKey, cardKey, resposta } = props
-        this.props.alterarCartao(baralhoKey, cardKey, { resposta })
-    }
-
-    removeCard = (baralhoKey, cardKey) => {
-
-        Alert.alert(
-            'Atenção!',
-            `Deseja remover esse cartão?`,
-            [
-                { text: 'Não' },
-                { text: 'Sim', onPress: () => {
-                    this.setState({ scrollToEnd: true })
-                    this.props.remove(baralhoKey, cardKey)
-                } },
-            ],
-            { cancelable: false }
-        )
-
-    }
-
-    toAddCard = (key) => {
-        this.setState({ scrollToEnd: true })
-        this.props.add(key)
-    }
-
-    handleScroll = (event) =>{
+    handleScroll = (event) => {
         const { x } = event.nativeEvent.contentOffset
         const window = Dimensions.get('window')
-        
+
         let pagina = 1;
-        
+
         if (x > 0) {
             pagina = Math.round(x / window.width) + 1
-        } 
+        }
 
         this.setState({ pagina })
     }
@@ -99,10 +44,6 @@ class Baralho extends React.Component {
                             pagingEnabled={true} 
                             scrollsToTop={false} 
                             showsHorizontalScrollIndicator={false} 
-                            ref={ref => this.scrollView = ref}
-                            onContentSizeChange={(contentWidth, contentHeight) => {
-                                this.scrollView.scrollToEnd({ animated: this.state.scrollToEnd });
-                            }}
                             onScroll={this.handleScroll}
                             scrollEventThrottle={16}
                         >
@@ -131,8 +72,8 @@ class Baralho extends React.Component {
 
                 <View style={styles.footer}>
 
-                    <TouchableOpacity onPress={() => this.toQuiz(key)}>
-                        <FontAwesome name='play-circle' size={60} style={styles.footerButtom}/>
+                    <TouchableOpacity>
+                        <MaterialIcons name='cancel' size={60} color={'#ef0404'}/>
                     </TouchableOpacity>   
 
                     <Text style={styles.numeroCartas}>
@@ -142,8 +83,8 @@ class Baralho extends React.Component {
                         </Text>
                     </Text>
 
-                    <TouchableOpacity onPress={() => this.toAddCard(key)}>
-                        <Ionicons name='ios-add-circle' size={60} style={styles.footerButtom}/>
+                    <TouchableOpacity>
+                        <Ionicons name='ios-checkmark-circle' size={60} color={'green'}/>
                     </TouchableOpacity>   
 
                 </View>
@@ -156,11 +97,11 @@ class Baralho extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
     },
     containerFlip: {
         flex: 5,
-        backgroundColor: '#fff',
+        backgroundColor: '#000',
     },
     footer: {
         flex: 1,
@@ -168,16 +109,12 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         height: 50,
     },
-    footerButtom: {
-        color: '#ef0404',
-        elevation: 2,
-    },
     numeroCartas: {
         textAlign: 'center',
         textAlignVertical: 'center',
         fontWeight: 'bold',
         fontSize: 12,
-        color: '#3b3b3b',
+        color: '#fff',
     },
     textInput: {
         fontWeight: 'bold',
@@ -203,7 +140,6 @@ const styles = StyleSheet.create({
 
 
 function mapStateToProps(baralhos) {
-
     return {
         baralhos
     }
@@ -212,15 +148,11 @@ function mapStateToProps(baralhos) {
 function mapDispatchToProps(dispatch) {
     return {
         fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
-        add: (key) => addCard(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
-        remove: (baralhoKey, cardKey) => removeCard(baralhoKey, cardKey).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
-        alterarCartao: (baralhoKey, cardKey, data) => updateCard(baralhoKey, cardKey, data).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
-        alterarBaralho: (key, dados) => updateBaralho(key, dados).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos)))),
     }
 }
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(Baralho)
+)(Quiz)
 

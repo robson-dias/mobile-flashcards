@@ -8,6 +8,7 @@ import { Constants } from 'expo'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
 import Baralho from './components/Baralho'
+import Quiz from './components/Quiz'
 
 
 const MainNavigator = StackNavigator({
@@ -28,6 +29,14 @@ const MainNavigator = StackNavigator({
               style={{ width: 250, padding: 10, fontSize: 16 }} 
               placeholder={'Insira um Título'}
             />
+    })
+  },
+  Quiz: {
+    screen: Quiz,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: `Quiz de ${navigation.state.params.title}`,
+      headerStyle: { backgroundColor: '#000'},
+      headerTintColor: '#fff',
     })
   }
 },
