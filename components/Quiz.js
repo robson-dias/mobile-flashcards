@@ -94,6 +94,7 @@ class Quiz extends React.Component {
                             <QuizResult 
                                 totalPerguntas={totalPerguntas}
                                 totalRespostasCorretas={totalRespostasCorretas}
+                                navigation={this.props.navigation}
                             />
 
                         </ScrollView>

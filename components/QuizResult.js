@@ -1,10 +1,17 @@
 import React from 'react';
 import { StyleSheet, Text, View, Animated, TouchableOpacity, TextInput, Keyboard, Dimensions } from 'react-native';
+import { NavigationActions } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 
 const {height, width} = Dimensions.get('window')
 
 export default class QuizResults extends React.Component {
+
+    toQuiz = () => {
+        const { title, key } = this.props.navigation.state.params
+
+        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Quiz', params: { title, key } }))
+    }
 
     render() {
 
@@ -22,7 +29,7 @@ export default class QuizResults extends React.Component {
 
                 <View style={styles.footer}>
 
-                    <TouchableOpacity style={styles.restartButton}>
+                    <TouchableOpacity style={styles.restartButton} onPress={() => this.toQuiz()}>
                         <MaterialCommunityIcons name='restart' size={60} color={'#fff85a'} />
                         <Text style={styles.textRestart}>Restart Quiz</Text>
                     </TouchableOpacity>
