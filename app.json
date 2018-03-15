@@ -1,5 +1,17 @@
 {
   "expo": {
-    "sdkVersion": "25.0.0"
+    "sdkVersion": "25.0.0",
+    "orientation": "portrait",
+    "name": "Flashcards",
+    "description": "",
+    "slug": "Flashcards",
+    "version": "1.0",
+    "icon": "https://icon-icons.com/icons2/588/PNG/512/1458264589_question_quiz_feedback_comments_enquiry_help_support_icon-icons.com_55335.png",
+    "notification": {
+      "icon": "http://www.student-scholarships.com/images/made/img/featured/nav_basketball_45_45.png"
+    },
+    "android": {
+      "package": "org.flashcards.exp"
+    }
   }
 }
