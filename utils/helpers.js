@@ -37,11 +37,12 @@ export function setLocalNotification(quiz) {
                             Notifications.cancelAllScheduledNotificationsAsync()
 
                             let now = new Date().getTime()
+                            now = now + (60000 * 30), // 30 minutos
 
                             Notifications.scheduleLocalNotificationAsync(
                                 createNotification(quiz),
                                 {
-                                    time: now + (60000 / 4),
+                                    time: now,
                                     repeat: 'day',
                                 }
                             )
