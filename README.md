@@ -11,11 +11,7 @@ Foi desenvolvido um aplicativo para dispositivos móveis (Android) que permite q
 
 Iniciando:
 
-* Instalar e iniciar o API server
-    - `npm install`
-    - `node server`
-* Em outra janela do terminal
-    - `cd frontend`
-    - `npm install`
-    - `npm start`
+* Instalar e iniciar
+    - `yarn install`
+    - `yarn start`
 
