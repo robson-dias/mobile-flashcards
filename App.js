@@ -7,6 +7,7 @@ import { DrawerNavigator, StackNavigator } from 'react-navigation'
 import { Constants } from 'expo'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
+import BaralhoAdd from './components/BaralhoAdd'
 import Baralho from './components/Baralho'
 import Quiz from './components/Quiz'
 import { setLocalNotification } from './utils/helpers'
@@ -21,15 +22,16 @@ const MainNavigator = StackNavigator({
       headerStyle: { paddingRight: 15, paddingLeft: 15 }
     })
   },
+  BaralhoAdd: {
+    screen: BaralhoAdd,
+    navigationOptions: ({ navigation }) => ({
+      headerTitle: 'Novo Baralho'
+    })
+  },
   Baralho: {
     screen: Baralho,
     navigationOptions: ({ navigation }) => ({
-        headerTitle: <TextInput 
-              value={navigation.state.params.title} 
-              onChangeText={(title) => navigation.state.params.setTitle(title)}
-              style={{ width: 250, padding: 10, fontSize: 16 }} 
-              placeholder={'Insira um Título'}
-            />
+      headerTitle: navigation.state.params.title
     })
   },
   Quiz: {

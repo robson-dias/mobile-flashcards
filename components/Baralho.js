@@ -16,27 +16,12 @@ class Baralho extends React.Component {
 
     componentDidMount() {
         this.setState({ scrollToEnd : false})
-
-        this.props.navigation.setParams({
-            setTitle: this.setTitle
-        })
-
     }
 
     toQuiz= (key) => {
         const { baralhos } = this.props
         const { title } = baralhos[key]
         this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'Quiz', params: { title, key } }))
-    }
-
-    setTitle = (title) => {
-
-        this.props.navigation.setParams({ title })
-
-        const { key } = this.props.navigation.state.params  
-
-        this.props.alterarBaralho(key, { title })
-
     }
 
     setPergunta = (props) => {

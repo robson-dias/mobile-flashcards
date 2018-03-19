@@ -24,19 +24,7 @@ class BaralhoLista extends React.Component {
     }
 
     toAddFlashcards = () => {
-
-        const indice = uuid()
-
-        const newBaralhos = Object.assign(this.props.baralhos, {[indice] : {
-            title: '',
-            cards: {[uuid()] : {
-                pergunta: '',
-                resposta: ''
-            }}
-        }})
-
-        this.props.add(newBaralhos, indice, this.props.navigation)
-
+        this.props.navigation.dispatch(NavigationActions.navigate({ routeName: 'BaralhoAdd'}))
     }
 
     toRemove = (key) => {
@@ -158,16 +146,6 @@ function mapStateToProps(baralhos) {
 function mapDispatchToProps(dispatch) {
     return {
         fetch: () => fetchBaralhos().then((baralhos) => dispatch(receiveBaralhos(baralhos))),
-        add: (baralhos, indice, navigation) => submitBaralho(baralhos).then(() => {
-          
-            const { title } = baralhos[indice]
-            navigation.dispatch(NavigationActions.navigate({ routeName: 'Baralho', params: { title: title, key: indice } }))
-
-            fetchBaralhos()
-                .then((baralhos) => dispatch(receiveBaralhos(baralhos)))
-            
-            
-        }),
         remove: (key) => removeBaralho(key).then((baralhos) => fetchBaralhos().then((baralhos) => dispatch(deleteBaralho(baralhos)))),
     }
 }
