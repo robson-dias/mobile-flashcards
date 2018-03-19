@@ -55,12 +55,7 @@ class Quiz extends React.Component {
 
         if (this.state.pagina === this.state.totalPerguntas) {
             clearLocalNotification()
-        } else {
-            const { key } = this.props.navigation.state.params
-            const { title } = this.props.baralhos[key]
-
-            clearLocalNotification()
-                .then(setLocalNotification(title))
+                .then(setLocalNotification())
         }
     }
 

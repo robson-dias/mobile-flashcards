@@ -4,10 +4,10 @@ import { Notifications, Permissions } from 'expo'
 
 const NOTIFICATION_KEY = 'Flashcards:notifications'
 
-function createNotification(quiz) {
+function createNotification() {
     return {
-        title: 'Olá!',
-        body: `Não esqueça de completar o Quiz de ${quiz}.`,
+        title: 'Olá! Vamos estudar?',
+        body: `Você não completou nenhum quiz hoje!`,
         ios: {
             sound: true,
         },
@@ -26,7 +26,7 @@ export function clearLocalNotification() {
 }
 
 
-export function setLocalNotification(quiz) {
+export function setLocalNotification() {
     AsyncStorage.getItem(NOTIFICATION_KEY)
         .then(JSON.parse)
         .then((data) => {
@@ -36,13 +36,13 @@ export function setLocalNotification(quiz) {
                         if (status === 'granted') {
                             Notifications.cancelAllScheduledNotificationsAsync()
 
-                            let now = new Date().getTime()
-                            now = now + (60000 * 30), // 30 minutos
+                            let tomorrow = new Date()
+                            tomorrow.setDate(tomorrow.getDate() + 1)
 
                             Notifications.scheduleLocalNotificationAsync(
-                                createNotification(quiz),
+                                createNotification(),
                                 {
-                                    time: now,
+                                    time: tomorrow,
                                     repeat: 'day',
                                 }
                             )

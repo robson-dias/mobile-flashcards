@@ -9,6 +9,7 @@ import { MaterialCommunityIcons } from '@expo/vector-icons'
 import BaralhoLista from './components/BaralhoLista'
 import Baralho from './components/Baralho'
 import Quiz from './components/Quiz'
+import { setLocalNotification } from './utils/helpers'
 
 
 const MainNavigator = StackNavigator({
@@ -68,6 +69,9 @@ const MainNavigator = StackNavigator({
 })
 
 export default class App extends React.Component {
+  componentDidMount() {
+    setLocalNotification()
+  }
   render() {
     return (
       <Provider store={createStore(reducer)}>
