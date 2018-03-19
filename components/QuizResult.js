@@ -2,10 +2,15 @@ import React from 'react';
 import { StyleSheet, Text, View, Animated, TouchableOpacity, TextInput, Keyboard, Dimensions } from 'react-native';
 import { NavigationActions } from 'react-navigation'
 import { MaterialCommunityIcons } from '@expo/vector-icons'
+import { setLocalNotification, clearLocalNotification } from '../utils/helpers'
 
 const {height, width} = Dimensions.get('window')
 
 export default class QuizResults extends React.Component {
+    componentDidMount() {
+        clearLocalNotification()
+            .then(setLocalNotification())
+    }
 
     toQuiz = () => {
         const { title, key } = this.props.navigation.state.params

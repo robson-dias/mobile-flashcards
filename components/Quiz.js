@@ -6,7 +6,6 @@ import { fetchBaralhos } from '../utils/api'
 import { MaterialIcons, Ionicons } from '@expo/vector-icons'
 import Cards from './QuizCards'
 import QuizResult from './QuizResult'
-import { setLocalNotification, clearLocalNotification } from '../utils/helpers'
 
 class Quiz extends React.Component {
 
@@ -51,11 +50,6 @@ class Quiz extends React.Component {
             this.setState((state) => {
                 return { totalRespostasCorretas: state.totalRespostasCorretas + 1 }
             })
-        }
-
-        if (this.state.pagina === this.state.totalPerguntas) {
-            clearLocalNotification()
-                .then(setLocalNotification())
         }
     }
 
